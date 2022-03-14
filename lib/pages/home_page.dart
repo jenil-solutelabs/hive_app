@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hive_app/pages/homepage_help/main_page.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_app/application/text.dart';
 import 'package:hive_app/pages/homepage_help/add_item.dart';
-import 'package:hive_app/pages/homepage_help/category_show.dart';
 import 'package:hive_app/pages/homepage_help/drawer_list.dart';
-import 'package:hive_app/pages/homepage_help/todo_page.dart';
 import 'package:hive_app/models/task_model.dart';
-import 'package:getwidget/getwidget.dart';
 
 //home page for todo app
 class HomePage extends StatefulWidget {
@@ -19,108 +17,97 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _isSearching = false;
+  bool _isOpen = true;
   // ignore: prefer_final_fields
   TextEditingController _searchQuery = TextEditingController();
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() {
-    super.initState();
-    Provider.of<TaskModel>(context, listen: false).getAllUser();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<TaskModel>(context);
-    //Scaffold wigdet of material app
-    return Scaffold(
-      key: scaffoldKey,
-      //app bar
-      appBar: AppBar(
-        leading: _isSearching
-            ? const BackButton()
-            : IconButton(
+    var screenSize = MediaQuery.of(context).size.width;
+    const breakPoint = 600;
+    if (screenSize >= breakPoint) {
+      //Scaffold wigdet of material app
+      return Row(
+        children: [
+          //drawer
+          if (_isOpen)
+            const SizedBox(
+              width: 300,
+              child: DrawerList(),
+            ),
+          Expanded(
+              child: Scaffold(
+            key: scaffoldKey,
+            //app bar
+            appBar: AppBar(
+              leading: _isSearching
+                  ? const BackButton()
+                  : IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _isOpen = !_isOpen;
+                        });
+                      },
+                      icon: const Icon(Icons.menu),
+                    ),
+              title: _isSearching ? _buildSearchField() : null,
+              automaticallyImplyLeading: true,
+              actions: _buildActions(),
+            ),
+            //add task
+            floatingActionButton: Container(
+              margin: const EdgeInsets.all(16.0),
+              child: FloatingActionButton(
                 onPressed: () {
-                  scaffoldKey.currentState?.openDrawer();
+                  AddItem().showAlertDialog(context);
                 },
-                icon: const Icon(Icons.menu),
+                tooltip: ApplicationText.tooltip,
+                backgroundColor: const Color.fromRGBO(255, 0, 255, 1),
+                child: const Icon(Icons.add),
               ),
-        title: _isSearching ? _buildSearchField() : null,
-        automaticallyImplyLeading: true,
-        actions: _buildActions(),
-      ),
-      //drawer
-      drawer: const DrawerList(),
-      //add task
-      floatingActionButton: Container(
-        margin: const EdgeInsets.all(16.0),
-        child: FloatingActionButton(
-          onPressed: () {
-            AddItem().showAlertDialog(context);
-          },
-          tooltip: ApplicationText.tooltip,
-          backgroundColor: const Color.fromRGBO(255, 0, 255, 1),
-          child: const Icon(Icons.add),
-        ),
-      ),
-      //main page column
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          //greeting container
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.all(16.0),
-            child: Text(ApplicationText.greet + " " + widget.name + "!!",
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 36,
-                    fontWeight: FontWeight.w700)),
-          ),
-          //category title
-          Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.all(16.0),
-              child: Text(ApplicationText.category,
-                  style: const TextStyle(
-                      color: Colors.white60,
-                      fontSize: 20,
-                      fontFamily: 'Dongle',
-                      letterSpacing: 1,
-                      fontWeight: FontWeight.w100))),
-          //category list
-          const CategoryList(),
-          //progress bar for task
-          Container(
-              padding: const EdgeInsets.all(16.0),
-              child: GFProgressBar(
-                percentage: provider.progress(),
-                lineHeight: 5,
-                alignment: MainAxisAlignment.spaceBetween,
-                leading:
-                    const Icon(Icons.sentiment_dissatisfied, color: Colors.red),
-                trailing:
-                    const Icon(Icons.sentiment_satisfied, color: Colors.green),
-                backgroundColor: const Color.fromRGBO(0, 0, 255, 1),
-                progressBarColor: const Color.fromRGBO(255, 0, 255, 1),
-              )),
-          //task title
-          Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(ApplicationText.todayTask,
-                  style: const TextStyle(
-                      color: Colors.white60,
-                      fontSize: 20,
-                      fontFamily: 'Dongle',
-                      letterSpacing: 1,
-                      fontWeight: FontWeight.w100))),
-          //task list
-          const Expanded(child: TodoList())
+            ),
+            //main page column
+            body: MainPage(name: widget.name),
+          ))
         ],
-      ),
-    );
+      );
+    } else {
+      //Scaffold wigdet of material app
+      return Scaffold(
+        key: scaffoldKey,
+        //app bar
+        appBar: AppBar(
+          leading: _isSearching
+              ? const BackButton()
+              : IconButton(
+                  onPressed: () {
+                    scaffoldKey.currentState?.openDrawer();
+                  },
+                  icon: const Icon(Icons.menu),
+                ),
+          title: _isSearching ? _buildSearchField() : null,
+          automaticallyImplyLeading: true,
+          actions: _buildActions(),
+        ),
+        //drawer
+        drawer: const DrawerList(),
+        //add task
+        floatingActionButton: Container(
+          margin: const EdgeInsets.all(16.0),
+          child: FloatingActionButton(
+            onPressed: () {
+              AddItem().showAlertDialog(context);
+            },
+            tooltip: ApplicationText.tooltip,
+            backgroundColor: const Color.fromRGBO(255, 0, 255, 1),
+            child: const Icon(Icons.add),
+          ),
+        ),
+        //main page column
+        body: MainPage(name: widget.name),
+      );
+    }
   }
 
   //start search

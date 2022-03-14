@@ -37,6 +37,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     box = Hive.box('Students');
+    Future.delayed(const Duration(seconds: 2));
     Timer(const Duration(seconds: 2), () async {
       //await getDetails();
       await check()
