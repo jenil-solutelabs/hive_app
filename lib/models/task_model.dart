@@ -6,7 +6,8 @@ class TaskModel extends ChangeNotifier {
   //item list
   List<Item> pitem = <Item>[];
   int? pending;
-  int? complete;
+  int complete = 0;
+  double sum = 0;
   final Box box = Hive.box('Item');
 
   //fetching items
@@ -17,41 +18,39 @@ class TaskModel extends ChangeNotifier {
       pitem.addAll(result);
       pending = result.where((element) => !element.check).length;
       complete = result.where((element) => element.check).length;
+      if (pitem.isEmpty || complete == 0) {
+        sum = 0.0;
+      } else {
+        double a = (complete.toDouble() / result.length.toDouble());
+        if (a == 0) {
+          sum = 0.0;
+        } else {
+          sum = a;
+        }
+      }
       notifyListeners();
     } else {
       pitem = <Item>[];
       pending = 0;
       complete = 0;
+      sum = 0;
       notifyListeners();
-    }
-  }
-
-  //progres bar logic
-  double progress() {
-    if (complete == 0) {
-      return 0.0;
-    } else {
-      double sum = ((complete!.toDouble()) / pitem.length.toDouble());
-      if (sum == 0) {
-        return 1.0;
-      } else {
-        return sum;
-      }
     }
   }
 
   //filter result logic
   List<Item> fresult = <Item>[];
   void filterSearch(String query) {
-    List<Item> result = <Item>[];
-    if (query.isNotEmpty) {
-      result = pitem
-          .where((element) =>
-              element.body.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    }
     fresult.clear();
-    fresult.addAll(result);
+    if (query.isEmpty) {
+      notifyListeners();
+      return;
+    }
+    for (var element in pitem) {
+      if (element.body.contains(query)) {
+        fresult.add(element);
+      }
+    }
     notifyListeners();
   }
 

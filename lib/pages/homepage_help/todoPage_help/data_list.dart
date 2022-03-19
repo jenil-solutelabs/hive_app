@@ -1,44 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hive_app/application/text.dart';
 import 'package:hive_app/models/item_model.dart';
 import 'package:hive_app/models/task_model.dart';
-import 'package:provider/provider.dart';
 import 'package:hive_app/pages/homepage_help/confirm_item.dart';
 import 'package:hive_app/pages/homepage_help/update_item.dart';
-
-//todoList class for show List
-class TodoList extends StatefulWidget {
-  const TodoList({Key? key}) : super(key: key);
-
-  @override
-  _TodoListState createState() => _TodoListState();
-}
-
-class _TodoListState extends State<TodoList> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<TaskModel>(context, listen: false).getAllUser();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    //Consumer for TaskModel
-    return Consumer<TaskModel>(
-      builder: (context, TaskModel data, child) {
-        return DataList(
-          item: data.fresult.isNotEmpty ? data.fresult : data.pitem,
-        );
-      },
-      child: Center(
-          child: Text(
-        ApplicationText.addTask,
-        style: const TextStyle(
-            color: Colors.white, fontSize: 14, fontFamily: 'Dongle'),
-      )),
-    );
-  }
-}
+import 'package:provider/provider.dart';
 
 //List View For Showing List of note
 class DataList extends StatelessWidget {
@@ -108,8 +73,10 @@ class DataList extends StatelessWidget {
                     children: [
                       IconButton(
                           onPressed: () {
-                            UpdateItem(item: item[index], index: index)
-                                .showAlertDialog(context);
+                            Future.delayed(Duration.zero, () {
+                              UpdateItem(item: item[index], index: index)
+                                  .showAlertDialog(context);
+                            });
                           },
                           icon: const Icon(
                             Icons.edit,
@@ -117,7 +84,9 @@ class DataList extends StatelessWidget {
                           )),
                       IconButton(
                           onPressed: () {
-                            ConfirmBox(index: index).showAlertDialog(context);
+                            Future.delayed(Duration.zero, () {
+                              ConfirmBox(index: index).showAlertDialog(context);
+                            });
                           },
                           icon: const Icon(Icons.clear, color: Colors.white60)),
                     ],

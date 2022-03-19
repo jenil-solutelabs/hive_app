@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                       },
                       icon: const Icon(Icons.menu),
                     ),
-              title: _isSearching ? _buildSearchField() : null,
+              title: _isSearching ? _buildSearchField() : _buildCategory(),
               automaticallyImplyLeading: true,
               actions: _buildActions(),
             ),
@@ -60,7 +60,9 @@ class _HomePageState extends State<HomePage> {
               margin: const EdgeInsets.all(16.0),
               child: FloatingActionButton(
                 onPressed: () {
-                  AddItem().showAlertDialog(context);
+                  Future.delayed(Duration.zero, () {
+                    AddItem().showAlertDialog(context);
+                  });
                 },
                 tooltip: ApplicationText.tooltip,
                 backgroundColor: const Color.fromRGBO(255, 0, 255, 1),
@@ -86,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   icon: const Icon(Icons.menu),
                 ),
-          title: _isSearching ? _buildSearchField() : null,
+          title: _isSearching ? _buildSearchField() : _buildCategory(),
           automaticallyImplyLeading: true,
           actions: _buildActions(),
         ),
@@ -97,7 +99,9 @@ class _HomePageState extends State<HomePage> {
           margin: const EdgeInsets.all(16.0),
           child: FloatingActionButton(
             onPressed: () {
-              AddItem().showAlertDialog(context);
+              Future.delayed(Duration.zero, () {
+                AddItem().showAlertDialog(context);
+              });
             },
             tooltip: ApplicationText.tooltip,
             backgroundColor: const Color.fromRGBO(255, 0, 255, 1),
@@ -117,6 +121,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _isSearching = true;
     });
+    updateSearchQuery("");
   }
 
   //stop search
@@ -146,6 +151,50 @@ class _HomePageState extends State<HomePage> {
           hintStyle: const TextStyle(color: Colors.white60)),
       style: const TextStyle(color: Colors.white, fontSize: 16.0),
       onChanged: updateSearchQuery,
+    );
+  }
+
+  //category field
+  var list = [
+    'All Lists',
+    'Default',
+    'Personal',
+    'Shopping',
+    'Wishlist',
+    'Work',
+  ];
+  String dropDownValue = 'All Lists';
+  Widget _buildCategory() {
+    return Container(
+      alignment: Alignment.centerLeft,
+      child: DropdownButton(
+          underline: const SizedBox(),
+          value: dropDownValue,
+          dropdownColor: Colors.blue,
+          style: const TextStyle(color: Colors.white),
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+            color: Colors.white,
+          ),
+          items: list.map((String items) {
+            return DropdownMenuItem(
+              value: items,
+              child: SizedBox(
+                width: 150,
+                child: ListTile(
+                  title: Text(
+                    items,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            setState(() {
+              dropDownValue = newValue!;
+            });
+          }),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_app/application/text.dart';
@@ -23,10 +24,12 @@ class _LoginPageState extends State<LoginPage> {
 
   void _showSnackBar(String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.floating,
+        width: kIsWeb ? 450 : null,
         content: Text(
-      text,
-      style: const TextStyle(color: Colors.white),
-    )));
+          text,
+          style: const TextStyle(color: Colors.white),
+        )));
   }
 
   void onLoginSuccess(Student? student) async {
@@ -46,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
         ApplicationText.loginSuccess,
         style: const TextStyle(color: Colors.white),
       )));
-      await Future.delayed(const Duration(seconds: 2));
       Navigator.pushReplacementNamed(context, HomePage.homerouteName,
           arguments: HomeAgruments(name: student.username));
     } else {
@@ -80,48 +82,48 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: Scaffold(
-          key: _scaffoldKey,
-          //footer
-          persistentFooterButtons: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(ApplicationText.footer,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Dongle',
-                          fontSize: 30)),
-                ),
-                TextButton(
-                    onPressed: () {
-                      setState(() {
-                        name.clear();
-                        pass.clear();
-                        _autovalidateMode = AutovalidateMode.disabled;
-                      });
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/register', ModalRoute.withName('/login'));
-                    },
-                    child: Text(
-                      ApplicationText.lresgister,
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                          color: Color.fromRGBO(255, 0, 255, 1),
-                          fontFamily: 'Dongle',
-                          fontSize: 30),
-                    )),
-              ],
-            )
-          ],
-          body: SingleChildScrollView(
-              child: Column(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        //footer
+        persistentFooterButtons: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(8.0),
+                child: Text(ApplicationText.footer,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Dongle',
+                        fontSize: 30)),
+              ),
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      name.clear();
+                      pass.clear();
+                      _autovalidateMode = AutovalidateMode.disabled;
+                    });
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/register', ModalRoute.withName('/login'));
+                  },
+                  child: Text(
+                    ApplicationText.lresgister,
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                        color: Color.fromRGBO(255, 0, 255, 1),
+                        fontFamily: 'Dongle',
+                        fontSize: 30),
+                  )),
+            ],
+          )
+        ],
+        body: SingleChildScrollView(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -146,119 +148,125 @@ class _LoginPageState extends State<LoginPage> {
               ),
               //form for login page
               Form(
-                  key: _formkey,
-                  autovalidateMode: _autovalidateMode,
-                  child: Column(
-                    children: <Widget>[
-                      //title of form 'Enter your name'
-                      Container(
-                        alignment: Alignment.center,
-                        child: Text(ApplicationText.titleForm,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 40,
-                                fontFamily: 'Dongle',
-                                fontWeight: FontWeight.w800)),
-                      ),
-                      //username form field
-                      Container(
-                        height: 55,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 8.0),
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25)),
-                        child: TextFormField(
-                          controller: name,
-                          validator: (value) {
-                            if (value == '') {
-                              return 'Enter Username';
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            labelStyle: const TextStyle(height: 0.3),
-                            contentPadding: const EdgeInsets.only(
-                                left: 11, right: 3, top: 12, bottom: 10),
-                            errorStyle:
-                                const TextStyle(fontSize: 12, height: 0.3),
-                            border: InputBorder.none,
-                            icon: const Icon(Icons.person),
-                            labelText: ApplicationText.username,
-                          ),
-                        ),
-                      ),
-                      //password form field
-                      Container(
-                        height: 55,
-                        margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25)),
-                        child: TextFormField(
-                          controller: pass,
-                          validator: (value) {
-                            if (value == '') {
-                              return 'Enter Password';
-                            }
-                            return null;
-                          },
-                          obscureText: isobsecure,
-                          keyboardType: TextInputType.visiblePassword,
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isobsecure = !isobsecure;
-                                  });
-                                },
-                                icon: Icon(isobsecure
-                                    ? Icons.visibility_off
-                                    : Icons.visibility)),
-                            labelStyle: const TextStyle(height: 0.3),
-                            contentPadding: const EdgeInsets.only(
-                                left: 11, right: 3, top: 12, bottom: 10),
-                            errorStyle:
-                                const TextStyle(fontSize: 12, height: 0.3),
-                            border: InputBorder.none,
-                            icon: const Icon(Icons.lock),
-                            labelText: ApplicationText.password,
-                          ),
-                        ),
-                      ),
-                      //Login button
-                      TextButton(
-                        child: Container(
-                          height: 50,
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 14.0, vertical: 8.0),
-                          decoration: BoxDecoration(
-                              color: const Color.fromRGBO(255, 0, 255, 1),
-                              borderRadius: BorderRadius.circular(25)),
-                          child: Text(
-                            ApplicationText.login,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Dongle',
-                                fontSize: 30),
-                          ),
-                        ),
-                        onPressed: () {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          setState(() {
-                            _autovalidateMode = AutovalidateMode.always;
-                          });
-                          _submit();
+                key: _formkey,
+                autovalidateMode: _autovalidateMode,
+                child: Column(
+                  children: <Widget>[
+                    //title of form 'Enter your name'
+                    Container(
+                      alignment: Alignment.center,
+                      child: Text(ApplicationText.titleForm,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 40,
+                              fontFamily: 'Dongle',
+                              fontWeight: FontWeight.w800)),
+                    ),
+                    //username form field
+                    Container(
+                      width: kIsWeb ? 450 : null,
+                      height: 55,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(25)),
+                      child: TextFormField(
+                        controller: name,
+                        validator: (value) {
+                          if (value == '') {
+                            return 'Enter Username';
+                          }
+                          return null;
                         },
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          labelStyle: const TextStyle(height: 0.3),
+                          contentPadding: const EdgeInsets.only(
+                              left: 11, right: 3, top: 12, bottom: 10),
+                          errorStyle:
+                              const TextStyle(fontSize: 12, height: 0.3),
+                          border: InputBorder.none,
+                          icon: const Icon(Icons.person),
+                          labelText: ApplicationText.username,
+                        ),
                       ),
-                    ],
-                  )),
+                    ),
+                    //password form field
+                    Container(
+                      width: kIsWeb ? 450 : null,
+                      height: 55,
+                      margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(25)),
+                      child: TextFormField(
+                        controller: pass,
+                        validator: (value) {
+                          if (value == '') {
+                            return 'Enter Password';
+                          }
+                          return null;
+                        },
+                        obscureText: isobsecure,
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  isobsecure = !isobsecure;
+                                });
+                              },
+                              icon: Icon(isobsecure
+                                  ? Icons.visibility_off
+                                  : Icons.visibility)),
+                          labelStyle: const TextStyle(height: 0.3),
+                          contentPadding: const EdgeInsets.only(
+                              left: 11, right: 3, top: 12, bottom: 10),
+                          errorStyle:
+                              const TextStyle(fontSize: 12, height: 0.3),
+                          border: InputBorder.none,
+                          icon: const Icon(Icons.lock),
+                          labelText: ApplicationText.password,
+                        ),
+                      ),
+                    ),
+                    //Login button
+                    TextButton(
+                      child: Container(
+                        width: kIsWeb ? 450 : null,
+                        height: 50,
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 14.0, vertical: 8.0),
+                        decoration: BoxDecoration(
+                            color: const Color.fromRGBO(255, 0, 255, 1),
+                            borderRadius: BorderRadius.circular(25)),
+                        child: Text(
+                          ApplicationText.login,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Dongle',
+                              fontSize: 30),
+                        ),
+                      ),
+                      onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        setState(() {
+                          _autovalidateMode = AutovalidateMode.always;
+                        });
+                        _submit();
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ],
-          )),
-        ));
+          ),
+        ),
+      ),
+    );
   }
 }

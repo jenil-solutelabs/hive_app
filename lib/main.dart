@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
       home: const SplashPage(),
       routes: {
         '/login': (context) => const LoginPage(),
-        '/register': (context) => const RegisterPage()
+        '/register': (context) => const RegisterPage(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == HomePage.homerouteName) {

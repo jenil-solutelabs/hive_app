@@ -12,6 +12,7 @@ class UpdateItem {
 
   //show dialog box
   showAlertDialog(BuildContext context) {
+    var itemWidth = MediaQuery.of(context).size.width;
     var provider = Provider.of<TaskModel>(context, listen: false);
     TextEditingController title = TextEditingController(text: item.body);
     // Create button
@@ -43,7 +44,7 @@ class UpdateItem {
                   letterSpacing: 1,
                   fontWeight: FontWeight.w500)),
           Container(
-            margin: const EdgeInsets.only(left: 50),
+            margin: EdgeInsets.only(left: itemWidth > 600 ? 100 : 60),
             padding: const EdgeInsets.all(4.0),
             child: GestureDetector(
               child: const Icon(
@@ -61,6 +62,7 @@ class UpdateItem {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
+              width: itemWidth > 600 ? 280 : 250,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(15)),
               child: TextFormField(

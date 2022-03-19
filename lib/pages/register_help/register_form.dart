@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_app/application/text.dart';
@@ -63,17 +64,21 @@ class _RegisterFormState extends State<RegisterForm> {
       box.add(student);
       form.reset();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          width: kIsWeb ? 450 : null,
           content: Text(
-        ApplicationText.registerSuccess,
-        style: const TextStyle(color: Colors.white),
-      )));
+            ApplicationText.registerSuccess,
+            style: const TextStyle(color: Colors.white),
+          )));
       Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          width: kIsWeb ? 450 : null,
           content: Text(
-        ApplicationText.allrequied,
-        style: const TextStyle(color: Colors.white),
-      )));
+            ApplicationText.allrequied,
+            style: const TextStyle(color: Colors.white),
+          )));
     }
   }
 
@@ -94,6 +99,7 @@ class _RegisterFormState extends State<RegisterForm> {
         children: [
           //firstname form field
           Container(
+              width: kIsWeb ? 450 : null,
               height: 55,
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
@@ -118,6 +124,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       border: InputBorder.none))),
           //Lastname form field
           Container(
+              width: kIsWeb ? 450 : null,
               height: 55,
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
@@ -144,6 +151,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       )))),
           //username form Field
           Container(
+              width: kIsWeb ? 450 : null,
               height: 55,
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
@@ -170,6 +178,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       )))),
           //Email Address form field
           Container(
+              width: kIsWeb ? 450 : null,
               height: 55,
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
@@ -196,6 +205,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       )))),
           //Password form field
           Container(
+              width: kIsWeb ? 450 : null,
               height: 55,
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
@@ -232,6 +242,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       )))),
           //Date of Birth form field
           Container(
+            width: kIsWeb ? 450 : null,
             height: 55,
             margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -262,6 +273,7 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           //Grade form field
           Container(
+              width: kIsWeb ? 450 : null,
               height: 55,
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
@@ -296,6 +308,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   })),
           //regiseter Button
           Container(
+              width: kIsWeb ? 450 : null,
               height: 55,
               margin:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),

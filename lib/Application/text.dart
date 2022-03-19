@@ -7,7 +7,7 @@ class ApplicationText {
   static String greet = "What's Up,";
   static String tooltip = 'Add Note';
   static String category = "CATEGORIES";
-  static String task = " task";
+  static String task = " Task";
   static String completeTask = "Complete Task";
   static String pendingTask = "Pending Task";
   static String todayTask = 'TODAY\'S TASKS';
@@ -44,4 +44,9 @@ class ApplicationText {
   static String notFound = 'Not Found Any Item';
   static String addTask = 'Add Some Task Here';
   static String allrequied = 'All Fields are required!!';
+  static String addSomeNote = 'Add Some Note Here';
+  static String edit = 'Edit';
+  static String submit = 'Submit';
+  static String giveFeedBack = 'Give Your Feedback';
+  static String thankYouFeedBack = 'Thank you for feedBack';
 }

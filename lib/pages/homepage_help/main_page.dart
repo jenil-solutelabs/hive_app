@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
-import 'package:hive_app/application/text.dart';
+import 'package:hive_app/Application/text.dart';
 import 'package:hive_app/models/task_model.dart';
 import 'package:hive_app/pages/homepage_help/category_show.dart';
-import 'package:hive_app/pages/homepage_help/todo_page.dart';
+import 'package:hive_app/pages/homepage_help/todoPage_help/data_grid.dart';
+import 'package:hive_app/pages/homepage_help/todoPage_help/data_list.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -18,7 +19,9 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<TaskModel>(context, listen: false).getAllUser();
+    Future.delayed(Duration.zero, () {
+      Provider.of<TaskModel>(context, listen: false).getAllUser();
+    });
   }
 
   @override
@@ -26,7 +29,6 @@ class _MainPageState extends State<MainPage> {
     var provider = Provider.of<TaskModel>(context);
     return Column(
       mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         //greeting container
         Container(
@@ -55,7 +57,7 @@ class _MainPageState extends State<MainPage> {
         Container(
             padding: const EdgeInsets.all(16.0),
             child: GFProgressBar(
-              percentage: provider.progress(),
+              percentage: provider.sum,
               lineHeight: 5,
               alignment: MainAxisAlignment.spaceBetween,
               leading:
@@ -77,7 +79,40 @@ class _MainPageState extends State<MainPage> {
                     letterSpacing: 1,
                     fontWeight: FontWeight.w100))),
         //task list
-        const Expanded(child: TodoList())
+        //Consumer for TaskModel
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) => Consumer<TaskModel>(
+              builder: (context, TaskModel data, child) {
+                return data.pitem.isEmpty
+                    ? Center(
+                        child: Text(
+                          ApplicationText.addSomeNote,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      )
+                    : constraints.maxWidth > 700
+                        ? DataGrid(
+                            item: data.fresult.isNotEmpty
+                                ? data.fresult
+                                : data.pitem,
+                          )
+                        : DataList(
+                            item: data.fresult.isNotEmpty
+                                ? data.fresult
+                                : data.pitem,
+                          );
+              },
+              child: Center(
+                child: Text(
+                  ApplicationText.addTask,
+                  style: const TextStyle(
+                      color: Colors.white, fontSize: 14, fontFamily: 'Dongle'),
+                ),
+              ),
+            ),
+          ),
+        )
       ],
     );
   }

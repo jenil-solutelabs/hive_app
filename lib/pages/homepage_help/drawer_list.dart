@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:hive_app/application/text.dart';
+import 'package:hive_app/pages/homepage_help/rateus_page.dart';
+import 'package:share_plus/share_plus.dart';
 
 //drawer list
-class DrawerList extends StatelessWidget {
+class DrawerList extends StatefulWidget {
   const DrawerList({Key? key}) : super(key: key);
 
   @override
+  State<DrawerList> createState() => _DrawerListState();
+}
+
+class _DrawerListState extends State<DrawerList> {
+  final String _content = 'todo app';
+  void share() {
+    Share.share(_content);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    //drawer
     return Drawer(
       backgroundColor: const Color.fromRGBO(0, 33, 71, 1),
       //list view for drawe
@@ -30,6 +41,9 @@ class DrawerList extends StatelessWidget {
           ))),
           // Rate us
           ListTile(
+              onTap: () {
+                RateUs().showAlertDialog(context);
+              },
               leading: const Icon(Icons.star, color: Colors.white60),
               title: Text(
                 ApplicationText.drawerRateus,
@@ -40,6 +54,7 @@ class DrawerList extends StatelessWidget {
               )),
           //Share app
           ListTile(
+              onTap: share,
               leading: const Icon(Icons.share, color: Colors.white60),
               title: Text(
                 ApplicationText.drawerShare,

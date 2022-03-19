@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:hive_app/application/text.dart';
-import 'package:hive_app/models/task_model.dart';
-import 'package:hive_app/models/item_model.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:hive_app/Application/text.dart';
 
 // ignore: must_be_immutable
-class AddItem {
+class RateUs {
   //show dialog box
   showAlertDialog(BuildContext context) {
-    TextEditingController title = TextEditingController();
-    var provider = Provider.of<TaskModel>(context, listen: false);
     var itemWidth = MediaQuery.of(context).size.width;
     // Create button
     Widget okButton = TextButton(
@@ -19,13 +15,17 @@ class AddItem {
         decoration: BoxDecoration(
             color: Colors.green, borderRadius: BorderRadius.circular(25)),
         alignment: Alignment.center,
-        child: Text(ApplicationText.add,
+        child: Text(ApplicationText.submit,
             style: const TextStyle(color: Colors.white)),
       ),
       onPressed: () {
-        provider.addItem(Item(body: title.text, check: false));
+        Scaffold.of(context).openEndDrawer();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+          ApplicationText.thankYouFeedBack,
+          style: const TextStyle(color: Colors.white),
+        )));
         Navigator.of(context).pop();
-        provider.getAllUser();
       },
     );
     // Create AlertDialog
@@ -33,7 +33,7 @@ class AddItem {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
       title: Row(
         children: <Widget>[
-          Text(ApplicationText.addTitle,
+          Text(ApplicationText.giveFeedBack,
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -57,17 +57,46 @@ class AddItem {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-              width: itemWidth > 600 ? 280 : 250,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(15)),
-              child: TextFormField(
-                controller: title,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                    hintText: ApplicationText.enterTitle),
-              )),
+          SizedBox(
+            width: itemWidth > 600 ? 280 : 250,
+            child: RatingBar.builder(
+              initialRating: 3,
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                switch (index) {
+                  case 0:
+                    return const Icon(
+                      Icons.sentiment_very_dissatisfied,
+                      color: Colors.red,
+                    );
+                  case 1:
+                    return const Icon(
+                      Icons.sentiment_dissatisfied,
+                      color: Colors.redAccent,
+                    );
+                  case 2:
+                    return const Icon(
+                      Icons.sentiment_neutral,
+                      color: Colors.amber,
+                    );
+                  case 3:
+                    return const Icon(
+                      Icons.sentiment_satisfied,
+                      color: Colors.lightGreen,
+                    );
+                  case 4:
+                    return const Icon(
+                      Icons.sentiment_very_satisfied,
+                      color: Colors.green,
+                    );
+                  default:
+                    return Container();
+                }
+              },
+              updateOnDrag: true,
+              onRatingUpdate: (rating) {},
+            ),
+          ),
         ],
       ),
       backgroundColor: const Color(0xFF344FA1),
