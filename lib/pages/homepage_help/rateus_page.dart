@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hive_app/Application/text.dart';
+import 'package:hive_app/main.dart';
 
 // ignore: must_be_immutable
 class RateUs {
@@ -19,13 +20,13 @@ class RateUs {
             style: const TextStyle(color: Colors.white)),
       ),
       onPressed: () {
-        Scaffold.of(context).openEndDrawer();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        Navigator.of(context).pop();
+        itemWidth > 600 ? null : Scaffold.of(context).openEndDrawer();
+        snackbarkey.currentState?.showSnackBar(SnackBar(
             content: Text(
           ApplicationText.thankYouFeedBack,
           style: const TextStyle(color: Colors.white),
         )));
-        Navigator.of(context).pop();
       },
     );
     // Create AlertDialog

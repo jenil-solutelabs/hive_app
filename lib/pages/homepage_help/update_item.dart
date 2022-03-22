@@ -44,7 +44,7 @@ class UpdateItem {
                   letterSpacing: 1,
                   fontWeight: FontWeight.w500)),
           Container(
-            margin: EdgeInsets.only(left: itemWidth > 600 ? 100 : 60),
+            margin: EdgeInsets.only(left: itemWidth > 600 ? 100 : 50),
             padding: const EdgeInsets.all(4.0),
             child: GestureDetector(
               child: const Icon(

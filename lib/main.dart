@@ -10,6 +10,8 @@ import 'package:hive_app/pages/splash_page.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
+final GlobalKey<ScaffoldMessengerState> snackbarkey =
+    GlobalKey<ScaffoldMessengerState>();
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(StudentAdapter());
@@ -33,6 +35,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: snackbarkey,
       theme: ThemeData(
         // This is the theme of your application.
         //
