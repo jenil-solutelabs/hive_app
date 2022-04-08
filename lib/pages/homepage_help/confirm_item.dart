@@ -10,6 +10,7 @@ class ConfirmBox {
   //show dialog box
   showAlertDialog(BuildContext context) {
     var provider = Provider.of<TaskModel>(context, listen: false);
+    var itemWidth = MediaQuery.of(context).size.width;
     // Create buttons
     Widget yesButton = TextButton(
         onPressed: () {
@@ -62,7 +63,10 @@ class ConfirmBox {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return Container(child: confirm);
+          return Container(
+              width: itemWidth > 600 ? 280 : 250,
+              child: confirm,
+          );
         });
   }
 }

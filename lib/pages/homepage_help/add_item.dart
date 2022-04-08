@@ -8,6 +8,7 @@ import 'package:hive_app/models/item_model.dart';
 class AddItem {
   //show dialog box
   showAlertDialog(BuildContext context) {
+    final _formAdd = GlobalKey<FormState>();
     TextEditingController title = TextEditingController();
     var provider = Provider.of<TaskModel>(context, listen: false);
     var itemWidth = MediaQuery.of(context).size.width;
@@ -22,10 +23,12 @@ class AddItem {
         child: Text(ApplicationText.add,
             style: const TextStyle(color: Colors.white)),
       ),
-      onPressed: () {
-        provider.addItem(Item(body: title.text, check: false));
-        Navigator.of(context).pop();
-        provider.getAllUser();
+      onPressed: (){
+        if(_formAdd.currentState!.validate()){
+          provider.addItem(Item(body: title.text, check: false));
+          Navigator.of(context).pop();
+          provider.getAllUser();
+        }
       },
     );
     // Create AlertDialog
@@ -54,7 +57,9 @@ class AddItem {
           )
         ],
       ),
-      content: Column(
+      content: Form(
+        key: _formAdd,
+        child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
@@ -63,12 +68,22 @@ class AddItem {
                   color: Colors.white, borderRadius: BorderRadius.circular(15)),
               child: TextFormField(
                 controller: title,
+                validator: (value){
+                  if(value == ''){
+                    return 'Enter Some Title Here';
+                  }
+                  return null;
+                },
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                    contentPadding: const EdgeInsets.only(
+                        left: 11, right: 3, top: 12, bottom: 10),
+                    errorStyle:
+                    const TextStyle(fontSize: 12, height: 0.3),
                     hintText: ApplicationText.enterTitle),
               )),
         ],
+      ),
       ),
       backgroundColor: const Color(0xFF344FA1),
       actions: [

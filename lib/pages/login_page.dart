@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
         ApplicationText.loginSuccess,
         style: const TextStyle(color: Colors.white),
       )));
-      Navigator.pushReplacementNamed(context, HomePage.homerouteName,
+      Navigator.pushNamedAndRemoveUntil(context, HomePage.homerouteName,(route) => false,
           arguments: HomeAgruments(name: student.username));
     } else {
       _showSnackBar("Invalid Username or Password");
@@ -59,15 +59,20 @@ class _LoginPageState extends State<LoginPage> {
   void _submit() {
     final form = _formkey.currentState;
     if (form!.validate()) {
-      List<Student> stud = <Student>[box.getAt(0)];
-      if (stud.isNotEmpty) {
-        if (stud.first.username == name.text &&
-            stud.first.password == pass.text) {
-          onLoginSuccess(stud.first);
-        } else {
-          _showSnackBar('Invalid username or password');
-        }
-      }
+     if(box.values.isEmpty){
+       _showSnackBar('User Does not exists');
+     }
+     else{
+       List<Student> stud = <Student>[box.getAt(0)];
+       if (stud.isNotEmpty) {
+         if (stud.first.username == name.text &&
+             stud.first.password == pass.text) {
+           onLoginSuccess(stud.first);
+         } else {
+           _showSnackBar('Invalid username or password');
+         }
+       }
+     }
     } else {
       _showSnackBar("All Fields are requied!!");
     }

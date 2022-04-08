@@ -12,6 +12,7 @@ class UpdateItem {
 
   //show dialog box
   showAlertDialog(BuildContext context) {
+    final _formEdit = GlobalKey<FormState>();
     var itemWidth = MediaQuery.of(context).size.width;
     var provider = Provider.of<TaskModel>(context, listen: false);
     TextEditingController title = TextEditingController(text: item.body);
@@ -26,10 +27,12 @@ class UpdateItem {
           child: Text(ApplicationText.save,
               style: const TextStyle(color: Colors.white))),
       onPressed: () {
-        var itm = Item(body: title.text, check: item.check);
-        provider.updateItem(itm, index);
-        Navigator.of(context).pop();
-        provider.getAllUser();
+       if(_formEdit.currentState!.validate()){
+         var itm = Item(body: title.text, check: item.check);
+         provider.updateItem(itm, index);
+         Navigator.of(context).pop();
+         provider.getAllUser();
+       }
       },
     );
     // Create AlertDialog
@@ -44,7 +47,7 @@ class UpdateItem {
                   letterSpacing: 1,
                   fontWeight: FontWeight.w500)),
           Container(
-            margin: EdgeInsets.only(left: itemWidth > 600 ? 100 : 50),
+            margin: EdgeInsets.only(left: itemWidth > 600 ? 100 : 60),
             padding: const EdgeInsets.all(4.0),
             child: GestureDetector(
               child: const Icon(
@@ -58,7 +61,9 @@ class UpdateItem {
           )
         ],
       ),
-      content: Column(
+      content: Form(
+        key: _formEdit,
+        child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
@@ -67,12 +72,22 @@ class UpdateItem {
                   color: Colors.white, borderRadius: BorderRadius.circular(15)),
               child: TextFormField(
                 controller: title,
+                validator: (value){
+                  if(value == ''){
+                    return 'Enter Some Title Here';
+                  }
+                  return null;
+                },
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                    contentPadding: const EdgeInsets.only(
+                        left: 11, right: 3, top: 12, bottom: 10),
+                    errorStyle:
+                    const TextStyle(fontSize: 12, height: 0.3),
                     hintText: ApplicationText.enterTitle),
               )),
         ],
+      ),
       ),
       backgroundColor: const Color(0xFF344FA1),
       actions: [
