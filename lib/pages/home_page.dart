@@ -41,6 +41,8 @@ class _HomePageState extends State<HomePage> {
             key: scaffoldKey,
             //app bar
             appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
               leading: _isSearching
                   ? const BackButton()
                   : IconButton(

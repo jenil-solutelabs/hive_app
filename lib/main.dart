@@ -51,7 +51,8 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF344FA1).withOpacity(1),
         appBarTheme: const AppBarTheme(
             backgroundColor: Color(0xFF344FA1),
-            shadowColor: Colors.transparent,
+            shadowColor: Color(0xFF344FA1),
+            elevation: 0,
             iconTheme: IconThemeData(color: Colors.white60)),
       ),
       home: const SplashPage(),

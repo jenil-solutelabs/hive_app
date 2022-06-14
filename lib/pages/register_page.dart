@@ -9,7 +9,10 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: kIsWeb ? false : true),
+      appBar: AppBar(
+        elevation: 0,
+          automaticallyImplyLeading: kIsWeb ? false : true,
+      ),
       persistentFooterButtons: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
